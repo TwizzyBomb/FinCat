@@ -1,4 +1,4 @@
-package zone.hesh.model;
+package hesh.zone.fincat.model;
 
 public class Charge {
 

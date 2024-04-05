@@ -1,10 +1,7 @@
-package zone.hesh.model;
+package hesh.zone.fincat.model;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Categories - This is a list which will keep a running total for finding
