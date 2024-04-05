@@ -3,7 +3,6 @@ package hesh.zone.fincat.model;
 import java.util.HashMap;
 
 public class Category {
-//    private static Category instance;
     String name;
     double total;
     HashMap<String, Charge> charges;

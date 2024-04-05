@@ -8,6 +8,7 @@ import java.util.HashMap;
  * the proportions the category takes up of the total
  */
 public class CatSet {
+//    private static CatSet instance;
     private HashMap<String, Category> categoriesMap;
     private double runningTotal;
     private String listName;
@@ -15,6 +16,14 @@ public class CatSet {
         categoriesMap = new HashMap<String, Category>();
         runningTotal = 0.0;
     }
+
+    // not what we want because we need an income and charge list to exist simultaniously
+//    public static CatSet getInstance() {
+//        if (instance == null) {
+//            instance = new CatSet();
+//        }
+//        return instance;
+//    }
 
     public void add(String name, Charge charge){
         // add to running total:

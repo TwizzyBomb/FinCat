@@ -25,11 +25,9 @@ public class FileSystem {
     String smallTestFilePath;
 
     /**
-     * @param chargeList - charge list obj
-     * @param incomeList - income list obj
      * @return List of String arrays, each representing a different Charge
      */
-    public List<String[]> loadFiles(CatSet chargeList, CatSet incomeList){
+    public List<String[]> loadTransactionFile() throws FileNotFoundException, IOException {
         List<String[]> data;
 
         // process csv to remove commas inside quotes
@@ -39,11 +37,8 @@ public class FileSystem {
         data = loadTransactionCsvFile(Constants.PIPE_FILE_PATH);
 
         // also the previously saved json file (does nothing but print if file not there)
-        /* chargeList = Utils.readJson("artifacts/out/chargelist.json");
-        incomeList = Utils.readJson("artifacts/out/incomeList.json");
-        */
-        chargeList = readJson(Constants.CHARGE_LIST_PATH);
-        incomeList = readJson(Constants.INCOME_LIST_PATH);
+//        readJson(Constants.CHARGE_LIST_PATH);
+//        readJson(Constants.INCOME_LIST_PATH);
 
         return data;
     }
@@ -53,7 +48,7 @@ public class FileSystem {
      * @param filePath
      * @return List of String arrays, each representing a different Charge
      */
-    private List<String[]> loadTransactionCsvFile(String filePath) {
+    private List<String[]> loadTransactionCsvFile(String filePath) throws FileNotFoundException, IOException {
         Path path = Path.of(filePath);
         Stream<String> lines;
         try {
@@ -63,13 +58,14 @@ public class FileSystem {
                     .collect(Collectors.toList());
         } catch(FileNotFoundException fnfe){
             System.out.println("Could not find pipe delimited transaction file ");
+            throw fnfe;
         } catch(IOException ioe){
             System.out.println("Encountered IO Exception looking for pipe delimited transaction file ");
+            throw ioe;
         }
-        return new ArrayList<String[]>();
     }
 
-    public void writeJson(String fileName, CatSet catSet){
+    public void writeJson(String fileName, CatSet catSet) throws IOException{
         // Create a Gson instance
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -79,12 +75,17 @@ public class FileSystem {
             System.out.println("JSON data has been written to the file: " + fileName);
         } catch (IOException e) {
             System.out.println("An error occurred while writing JSON to the file: " + e.getMessage());
-            e.printStackTrace();
+            throw e;
         }
     }
 
-    public CatSet readJson(String fileName){
-        CatSet catSet = new CatSet();
+    public CatSet getCatSetFile(String fileName){
+        CatSet catSet = readJson(fileName);
+        return catSet != null ? catSet : new CatSet();
+    }
+
+    public CatSet readJson(String fileName) {
+        CatSet catSet = null;
         try (FileReader reader = new FileReader(fileName)) {
             // Create a Gson instance
             Gson gson = new Gson();
@@ -93,8 +94,8 @@ public class FileSystem {
             catSet = gson.fromJson(reader, CatSet.class);
             System.out.println("Successfully loaded previous json file:" + fileName);
         } catch (IOException e) {
-            System.out.println("An error occurred while reading JSON from the file: " + e.getMessage());
-//            e.printStackTrace();
+            System.out.println("IOException while reading " + fileName + " exception message: " + e.getMessage());
+//            throw e;
         }
         return catSet;
     }
