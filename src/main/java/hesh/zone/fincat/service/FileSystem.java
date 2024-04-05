@@ -2,11 +2,11 @@ package hesh.zone.fincat.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import hesh.zone.fincat.config.PathProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.utilities.Utils;
+import hesh.zone.fincat.config.Constants;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,12 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Service
+@Component
 public class FileSystem {
-
-    @Autowired
-    private PathProperties paths;
-    public FileSystem(){}
+    @Value("${hesh.paths.test_file_small}")
+    String smallTestFilePath;
 
     /**
      * @param chargeList - charge list obj
@@ -34,21 +32,18 @@ public class FileSystem {
     public List<String[]> loadFiles(CatSet chargeList, CatSet incomeList){
         List<String[]> data;
 
-        /* "artifacts/test_files/CheckingTestSmall.csv"
-         * "artifacts/test_files/PipeDelimitedTransactions.csv" */
-
         // process csv to remove commas inside quotes
-        Utils.replaceCommasOutsideQuotes(paths.getTestFileSmall(), paths.getPipeFile());
+        Utils.replaceCommasOutsideQuotes(Constants.TEST_SMALL_PATH, Constants.PIPE_FILE_PATH);
 
         // first we go in and fetch the csv bank data
-        data = loadTransactionCsvFile(paths.getPipeFile());
+        data = loadTransactionCsvFile(Constants.PIPE_FILE_PATH);
 
         // also the previously saved json file (does nothing but print if file not there)
         /* chargeList = Utils.readJson("artifacts/out/chargelist.json");
         incomeList = Utils.readJson("artifacts/out/incomeList.json");
         */
-        chargeList = readJson(paths.getChargeList());
-        incomeList = readJson(paths.getIncomeList());
+        chargeList = readJson(Constants.CHARGE_LIST_PATH);
+        incomeList = readJson(Constants.INCOME_LIST_PATH);
 
         return data;
     }

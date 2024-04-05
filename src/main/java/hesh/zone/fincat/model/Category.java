@@ -22,13 +22,6 @@ public class Category {
         charges.put(chargeKey, charge);
     }
 
-//    public static Category getInstance() {
-//        if (instance == null) {
-//            instance = new Category();
-//        }
-//        return instance;
-//    }
-
     public void addToTotal(double price){
         this.total += price;
     }
