@@ -1,11 +1,14 @@
 package hesh.zone.fincat.model;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Category {
-    String name;
-    double total;
-    HashMap<String, Charge> charges;
+    private String name;
+    private double total;
+    private HashMap<String, Charge> charges;
+    private Category parentCategory;
+    private List<Category> subCategories;
     public Category(String name) {
         total = 0.0;
         charges = new HashMap<String, Charge>();

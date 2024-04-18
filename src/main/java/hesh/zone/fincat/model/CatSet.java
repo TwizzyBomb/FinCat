@@ -11,13 +11,12 @@ public class CatSet {
 //    private static CatSet instance;
     private HashMap<String, Category> categoriesMap;
     private double runningTotal;
-    private String listName;
     public CatSet(){
         categoriesMap = new HashMap<String, Category>();
         runningTotal = 0.0;
     }
 
-    // not what we want because we need an income and charge list to exist simultaniously
+    // not what we want because we need an income and charge list instance to exist simultaniously
 //    public static CatSet getInstance() {
 //        if (instance == null) {
 //            instance = new CatSet();
