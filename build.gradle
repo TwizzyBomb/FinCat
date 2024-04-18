@@ -25,6 +25,14 @@ repositories {
 dependencies {
 	// program libs
 	implementation 'org.springframework.boot:spring-boot-starter'
+	// spring boot
+	// Spring Boot Starter for Web (includes Spring MVC)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-json'
+	// Optional: Spring Boot Starter for Security (for security)
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Optional: Spring Boot Starter for Actuator (for monitoring and management)
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:org.springframework.boot.gradle.plugin:3.2.4'
 	implementation 'org.springframework:spring-web:6.1.5'
 
