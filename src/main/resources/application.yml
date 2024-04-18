@@ -1,0 +1,19 @@
+test: test1
+spring:
+  application:
+    name: FinCat
+hesh:
+  paths:
+    charge_list: artifacts/out/
+    income_list: "artifacts/out"
+    test_file_small: "artifacts/sample_files/CheckingTestSmall.csv"
+    test_file: "artifacts/sample_files/CheckingTest.csv"
+    pipe_file: "artifacts/sample_files/PipeDelimitedTransactions.csv"
+logging:
+  level:
+    org:
+      springframework=DEBUG:
+      springframework:
+        context:
+          annotation:
+            ClassPathScanningCandidateComponentProvider: DEBUG

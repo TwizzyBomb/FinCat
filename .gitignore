@@ -1,3 +1,12 @@
+# local test files
+artifacts/
+
+# images
+images/
+
+#temp
+src/main/java/hesh/zone/fincat/view/
+
 # Compiled class file
 *.class
 

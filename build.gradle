@@ -2,24 +2,54 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 group = 'hesh.zone'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	sourceCompatibility = '17'
-}
+//java {
+//	sourceCompatibility = '17'
+//	targetCompatibility = '17'
+//}
+
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+	// program libs
 	implementation 'org.springframework.boot:spring-boot-starter'
+	// spring boot
+	// Spring Boot Starter for Web (includes Spring MVC)
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-json'
+	// Optional: Spring Boot Starter for Security (for security)
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Optional: Spring Boot Starter for Actuator (for monitoring and management)
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:org.springframework.boot.gradle.plugin:3.2.4'
+	implementation 'org.springframework:spring-web:6.1.5'
+
+	implementation 'com.google.code.gson:gson:2.10.1'
+	implementation 'org.yaml:snakeyaml:2.2'
+
+	// test libs
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation platform('org.junit:junit-bom:5.9.1')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+javafx {
+	version = "16" // Specify the JavaFX version you want to use
+	modules = [ 'javafx.controls', 'javafx.fxml' ] // Specify the JavaFX modules you want to include
 }
