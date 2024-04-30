@@ -3,7 +3,7 @@ package hesh.zone.fincat.service;
 import hesh.zone.fincat.config.Constants;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
-
+import hesh.zone.fincat.service.FileSystem;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class Cmd {
     incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
     
     // load old data into charge & income list objects and fetch new transactions into data List
-    List<String[]> data = fileSystem.loadTransactionFile();
+    List<String[]> data = fileSystem.loadLocalTransactionsFile();
     
     try (Scanner scanner = new Scanner(System.in)) {
       // hi
