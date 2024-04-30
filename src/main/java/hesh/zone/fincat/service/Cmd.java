@@ -63,7 +63,7 @@ public class Cmd {
         // log
         System.out.println("\nCreated cat" + charge.getDescription() + " to " + charge.getCategory() + " with amount " + charge.getAmount());
         
-        // delegate all the sorting to the CatSet class - check if income or charge and add to appropriate obj
+        // check if income or charge and add to appropriate obj
         if (row[1].replace("\"", "").startsWith("-")) {
           // add charge to category in list, create category if doesn't exist
           chargeList.add(categoryName, charge);
