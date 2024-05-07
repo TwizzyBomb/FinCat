@@ -2,7 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 group = 'hesh.zone'
@@ -13,7 +12,7 @@ version = '0.0.1-SNAPSHOT'
 //	targetCompatibility = '17'
 //}
 
-
+// java
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
@@ -49,7 +48,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-javafx {
-	version = "16" // Specify the JavaFX version you want to use
-	modules = [ 'javafx.controls', 'javafx.fxml' ] // Specify the JavaFX modules you want to include
-}
+//javafx {
+//	version = "16" // Specify the JavaFX version you want to use
+//	modules = [ 'javafx.controls', 'javafx.fxml' ] // Specify the JavaFX modules you want to include
+//}

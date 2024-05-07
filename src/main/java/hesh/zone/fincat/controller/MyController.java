@@ -42,9 +42,8 @@ public class MyController {
   
   // Your other endpoint mappings and methods here
   @PostMapping("/add")
-  public ResponseEntity<String> addToObjects(@RequestHeader("Category") String sCatName, @RequestBody String sCategory) {
-    System.out.println("sCategory:" + sCategory);
-    System.out.println("sCatName:" + sCatName);
+  public ResponseEntity<String> addToObjects(@RequestHeader("Raw-Category-Name") String rawCatName, @RequestBody String json) {
+    System.out.println("Json:" + json.toString());
     List<String[]> data = null;
     String sResponse = null;
     
@@ -54,16 +53,16 @@ public class MyController {
     // convert the json into a charge and add to catset list then save back to file
     try {
       Gson gson = new Gson();
-      Charge charge = gson.fromJson(sCategory, Charge.class);
+      Charge charge = gson.fromJson(json, Charge.class);
       
       // check if income or charge and add to appropriate obj
       if (charge.getAmount() < 0) {
         // add charge to category in list, create category if doesn't exist
-        chargeList.add(sCatName, charge);
+        chargeList.add(rawCatName, charge);
         sResponse = "Added to charges";
       } else {
         // positive = income
-        incomeList.add(sCatName, charge);
+        incomeList.add(rawCatName, charge);
         sResponse = "Added to income";
       }
       if(null == sResponse) {
