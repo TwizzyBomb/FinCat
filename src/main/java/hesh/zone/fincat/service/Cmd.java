@@ -1,9 +1,9 @@
 package hesh.zone.fincat.service;
 
 import hesh.zone.fincat.config.Constants;
+import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
-import hesh.zone.fincat.service.FileSystem;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,10 +31,10 @@ public class Cmd {
       if (data.size() == 0) {
         System.out.println("No data found, thanks for playing!");
         if( null != chargeList ){
-          chargeList.createBreakdown();
+          chargeList.createCmdBreakdown();
         }
         if( null != incomeList ){
-          incomeList.createBreakdown();
+          incomeList.createCmdBreakdown();
         }
         // bye!
         exit();
@@ -82,9 +82,13 @@ public class Cmd {
       fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
     }
     
-    // print totals
-    chargeList.createBreakdown();
-    incomeList.createBreakdown();
+//    // print totals
+//    chargeList.createCmdBreakdown();
+//    incomeList.createCmdBreakdown();
+    Breakdown chargeBreakdown = chargeList.createWebBreakdown();
+    Breakdown incomeBreakdown = incomeList.createWebBreakdown();
+    System.out.println(chargeBreakdown.toString());
+    System.out.println(incomeBreakdown.toString());
     
     exit();
   }

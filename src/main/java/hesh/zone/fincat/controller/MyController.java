@@ -2,8 +2,8 @@ package hesh.zone.fincat.controller;
 
 import com.google.gson.Gson;
 import hesh.zone.fincat.config.Constants;
+import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
-import hesh.zone.fincat.model.Category;
 import hesh.zone.fincat.model.Charge;
 import hesh.zone.fincat.service.FileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +75,8 @@ public class MyController {
       fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
       
       // print totals
-      chargeList.createBreakdown();
-      incomeList.createBreakdown();
+      chargeList.createCmdBreakdown();
+      incomeList.createCmdBreakdown();
       
       chargeList = null;
       incomeList = null;
@@ -105,6 +105,25 @@ public class MyController {
       String errorMessage = "Failed to load transactions file " + e.getMessage();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
     }
-
+  }
+  
+  @PostMapping("/breakdown")
+  public ResponseEntity<String> respondWithBreakdown(){
+    System.out.println("recieved request for breakdown");
+    
+    chargeList = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
+    incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+    
+    Breakdown chargeBd = chargeList.createWebBreakdown();
+    Breakdown incomeBd = incomeList.createWebBreakdown();
+    
+    Gson gson = new Gson();
+    try{
+      return ResponseEntity.ok(gson.toJson(incomeBd, chargeBd));
+    } catch (Exception e){
+      // Handle the exception and return an error response
+      String errorMessage = "Failed to create/send breakdown " + e.getMessage();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+    }
   }
 }
