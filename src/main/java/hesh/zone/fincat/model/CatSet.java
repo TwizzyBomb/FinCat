@@ -1,8 +1,7 @@
 package hesh.zone.fincat.model;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Categories - This is a list which will keep a running total for finding
@@ -116,8 +115,9 @@ public class CatSet {
 //      categoriesMap.get(name).add(charge);
 //    }
 //  }
-  
-  public void createBreakdown() {
+
+  public void createCmdBreakdown() {
+
     int n = categoriesMap.size();
     DecimalFormat df = new DecimalFormat("0.00");
     
@@ -138,6 +138,50 @@ public class CatSet {
         
       }
     }
+  }
+  
+  /**
+   * createWebBreakdown - This method will return a double array of values that add up to 100
+   * for the web interface to use its chart framework (chart.js or d3.js) to display it on
+   * the page
+   * Returns obj representing: parent category, child category, each percent for child,
+   * the total for that parent, and the total for the whole thing
+   * @return double[] percentList
+   */
+  public Breakdown createWebBreakdown() {
+    HashMap<String, HashMap<String, Double>> breakdownStructure = new HashMap<>();
+    int n = categoriesMap.size();
+    DecimalFormat df = new DecimalFormat("0.00"); // what diff does it make if we format here vs client side?
+    StringBuilder sb = new StringBuilder();
+    if (n > 0) {
+      // loop through adding labels and doubles
+      for (Category parentCat : categoriesMap.values() ) {
+        double totalPercentForParent = 0.0;
+        HashMap<String, Double> childrensTotals = new HashMap<>();
+        
+        for( Category childCat : parentCat.getChildCategories().values() ) {
+          // check if total has been computed for this yet
+          if (null == childrensTotals.get("total")){
+            childrensTotals.put("total", Double.valueOf(df.format(childCat.getTotal())));
+          } else {
+            double running = childrensTotals.get("total");
+            childrensTotals.put("total", Double.valueOf(df.format(running + childCat.getTotal() )));
+          }
+          
+          childrensTotals.put(childCat.getName(), childCat.getTotal());
+//          System.out.println(df.format(childCat.getTotal())
+//                  + " towards " + childCat.getName() + "\t\t"
+//                  + df.format((childCat.getTotal() / runningTotal) * 100)
+//                  + "% of total spent this month");
+        }
+        
+        // add to outer map
+        breakdownStructure.put(parentCat.getName(), childrensTotals);
+//        System.out.println("total percent for " + parentCat.getName() + ": "
+//                + df.format((totalPercentForParent / runningTotal) * 100) + "%");
+      }
+    }
+    return new Breakdown(runningTotal, breakdownStructure);
   }
   
   public HashMap<String, Category> getCategoriesMap() {

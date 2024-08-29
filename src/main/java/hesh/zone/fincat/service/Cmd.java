@@ -1,9 +1,9 @@
 package hesh.zone.fincat.service;
 
 import hesh.zone.fincat.config.Constants;
+import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class Cmd {
     incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
     
     // load old data into charge & income list objects and fetch new transactions into data List
-    List<String[]> data = fileSystem.loadTransactionFile();
+    List<String[]> data = fileSystem.loadLocalTransactionsFile();
     
     try (Scanner scanner = new Scanner(System.in)) {
       // hi
@@ -31,10 +31,10 @@ public class Cmd {
       if (data.size() == 0) {
         System.out.println("No data found, thanks for playing!");
         if( null != chargeList ){
-          chargeList.createBreakdown();
+          chargeList.createCmdBreakdown();
         }
         if( null != incomeList ){
-          incomeList.createBreakdown();
+          incomeList.createCmdBreakdown();
         }
         // bye!
         exit();
@@ -63,7 +63,7 @@ public class Cmd {
         // log
         System.out.println("\nCreated cat" + charge.getDescription() + " to " + charge.getCategory() + " with amount " + charge.getAmount());
         
-        // delegate all the sorting to the CatSet class - check if income or charge and add to appropriate obj
+        // check if income or charge and add to appropriate obj
         if (row[1].replace("\"", "").startsWith("-")) {
           // add charge to category in list, create category if doesn't exist
           chargeList.add(categoryName, charge);
@@ -82,9 +82,13 @@ public class Cmd {
       fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
     }
     
-    // print totals
-    chargeList.createBreakdown();
-    incomeList.createBreakdown();
+//    // print totals
+//    chargeList.createCmdBreakdown();
+//    incomeList.createCmdBreakdown();
+    Breakdown chargeBreakdown = chargeList.createWebBreakdown();
+    Breakdown incomeBreakdown = incomeList.createWebBreakdown();
+    System.out.println(chargeBreakdown.toString());
+    System.out.println(incomeBreakdown.toString());
     
     exit();
   }

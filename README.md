@@ -1,6 +1,11 @@
 # FinCat
 This project is a transaction sorter and budget categorizing and planning tool written by Yahia Adrian Brocke
 
+# Running Locally
+To run this program locally please ensure: 
+1) Constants file has the proper test file paths
+2) Implementing the CommandLineRunner in main
+
 # Todo:
 
 // looping through the known categories,
