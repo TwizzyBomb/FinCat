@@ -5,6 +5,7 @@ import hesh.zone.fincat.config.Constants;
 import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
+import hesh.zone.fincat.model.Pair;
 import hesh.zone.fincat.service.FileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -119,7 +120,8 @@ public class MyController {
     
     Gson gson = new Gson();
     try{
-      return ResponseEntity.ok(gson.toJson(incomeBd, chargeBd));
+      /* add content header to response */
+      return ResponseEntity.ok(gson.toJson(new Pair<Breakdown>(incomeBd, chargeBd)));
     } catch (Exception e){
       // Handle the exception and return an error response
       String errorMessage = "Failed to create/send breakdown " + e.getMessage();
