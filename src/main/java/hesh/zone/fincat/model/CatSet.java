@@ -115,8 +115,9 @@ public class CatSet {
 //      categoriesMap.get(name).add(charge);
 //    }
 //  }
-  
+
   public void createCmdBreakdown() {
+
     int n = categoriesMap.size();
     DecimalFormat df = new DecimalFormat("0.00");
     
