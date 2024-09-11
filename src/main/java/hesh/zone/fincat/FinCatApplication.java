@@ -5,8 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import hesh.zone.fincat.service.Cmd;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class FinCatApplication { // implements CommandLineRunner
 	public static void main(String[] args) {
 		SpringApplication.run(FinCatApplication.class, args);

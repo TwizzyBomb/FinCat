@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api")
@@ -47,15 +48,17 @@ public class MyController {
     System.out.println("Json:" + json.toString());
     List<String[]> data = null;
     String sResponse = null;
-    
-    chargeList = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
     
     // convert the json into a charge and add to catset list then save back to file
     try {
       Gson gson = new Gson();
       Charge charge = gson.fromJson(json, Charge.class);
-      
+
+      chargeList = chrgLstFuture.get(); // blocking but I get some benefit of the above code executing while file ops occur
+      incomeList = incmLstFuture.get();
       // check if income or charge and add to appropriate obj
       if (charge.getAmount() < 0) {
         // add charge to category in list, create category if doesn't exist
@@ -111,15 +114,19 @@ public class MyController {
   @PostMapping("/breakdown")
   public ResponseEntity<String> respondWithBreakdown(){
     System.out.println("recieved request for breakdown");
-    
-    chargeList = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+
+    try{
+    chargeList = chrgLstFuture.get();
+    incomeList = incmLstFuture.get();
     
     Breakdown chargeBd = chargeList.createWebBreakdown();
     Breakdown incomeBd = incomeList.createWebBreakdown();
     
     Gson gson = new Gson();
-    try{
+
       /* add content header to response */
       return ResponseEntity.ok(gson.toJson(new Pair<Breakdown>(incomeBd, chargeBd)));
     } catch (Exception e){
