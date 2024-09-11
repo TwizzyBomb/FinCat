@@ -13,7 +13,19 @@ import java.util.Scanner;
 public class Cmd {
   private static CatSet chargeList = null;
   private static CatSet incomeList = null;
-  
+
+  public void gptTerminalTest(){
+    ChatGptWebClient gptWebClient = new ChatGptWebClient();
+
+    try (Scanner scanner = new Scanner(System.in)) {
+      while(scanner.hasNext()){
+        System.out.println("please ask chatgpt a question");
+        String gptQuery = scanner.nextLine();
+        gptWebClient.sendGptHttpRequest(gptQuery);
+      }
+    }
+  }
+
   public void terminalRun() throws FileNotFoundException, IOException {
     
     FileSystem fileSystem = new FileSystem();
@@ -21,7 +33,7 @@ public class Cmd {
     incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
     
     // load old data into charge & income list objects and fetch new transactions into data List
-    List<String[]> data = fileSystem.loadLocalTransactionsFile();
+    List<String[]> data = fileSystem.loadLocalTransactionsFile(Constants.TEST_SMALL_PATH);
     
     try (Scanner scanner = new Scanner(System.in)) {
       // hi

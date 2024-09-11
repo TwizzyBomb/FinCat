@@ -40,7 +40,24 @@ public class FileSystem {
     deleteFile(Constants.PIPE_FILE_PATH);
     return data;
   }
-  
+
+  /**
+   * loadLocalTransactionsFile - uses the constant set in Constants to load the transactions,
+   * load it into a pipe delimited format, then return the data
+   *
+   * @return List of String arrays, each representing a different Charge
+   */
+  public List<String[]> loadLocalTransactionsFile(String filepath) throws FileNotFoundException, IOException {
+    List<String[]> data;
+
+    // process csv to remove commas inside quotes
+    Utils.replaceLocalCommasOutsideQuotes(filepath, Constants.PIPE_FILE_PATH);
+
+    // first we go in and fetch the csv bank data
+    data = loadTransactionCsvFile(Constants.PIPE_FILE_PATH);
+
+    return data;
+  }
   /**
    * loadLocalTransactionsFile - uses the constant set in Constants to load the transactions,
    * load it into a pipe delimited format, then return the data
