@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 @Configuration
 public class AsyncConfig {
 
-    @Bean(name = "taskExecutor")
+
 
     /**
      * taskExecutor
@@ -19,6 +19,7 @@ public class AsyncConfig {
      * you can still use @Async to execute a method asynchronously allowing it to
      * return immediately without blocking the main thread.
      */
+    @Bean(name = "taskExecutor")
     public Executor taskExecutor() {
 
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
