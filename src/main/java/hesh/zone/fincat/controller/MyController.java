@@ -113,7 +113,7 @@ public class MyController {
   
   @PostMapping("/breakdown")
   public ResponseEntity<String> respondWithBreakdown(){
-    System.out.println("recieved request for breakdown");
+    System.out.println("received request for breakdown");
 
     CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
     CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
