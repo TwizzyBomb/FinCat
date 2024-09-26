@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class Cmd {
   private static CatSet chargeList = null;
@@ -17,15 +19,25 @@ public class Cmd {
   public void terminalRun() throws FileNotFoundException, IOException {
     
     FileSystem fileSystem = new FileSystem();
-    chargeList = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    incomeList = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
     
     // load old data into charge & income list objects and fetch new transactions into data List
-    List<String[]> data = fileSystem.loadLocalTransactionsFile();
-    
-    try (Scanner scanner = new Scanner(System.in)) {
+      List<String[]> data = null;
+      try {
+          data = fileSystem.loadLocalTransactionsFile();
+      } catch (ExecutionException e) {
+          throw new RuntimeException(e);
+      } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+      }
+
+      try (Scanner scanner = new Scanner(System.in)) {
       // hi
       System.out.println("Hi");
+      chargeList = chrgLstFuture.get();
+      incomeList = incmLstFuture.get();
       
       // no data means say goodbye!
       if (data.size() == 0) {
@@ -80,6 +92,9 @@ public class Cmd {
       // serialize current sorted category objects to json
       fileSystem.writeJson(Constants.CHARGE_LIST_PATH, chargeList);
       fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
+    } catch (Exception e){
+
+      System.out.println("Exception Encountered:" + e);
     }
     
 //    // print totals
