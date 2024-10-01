@@ -8,6 +8,7 @@ import hesh.zone.fincat.model.Charge;
 import hesh.zone.fincat.model.Pair;
 import hesh.zone.fincat.service.FileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +19,14 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping("/api")
 public class MyController {
+
+  @Value("hesh.paths.charge_list")
+  private String chargeListPath;
   
   @Autowired
   FileSystem fileSystem;
   private static CatSet chargeList = null;
   private static CatSet incomeList = null;
-  
-  @GetMapping("/hello")
-  public ResponseEntity<String> hello() {
-    String message = "Hello, World!";
-    return ResponseEntity.ok(message);
-  }
   
   @GetMapping("/error")
   public ResponseEntity<String> error() {
@@ -36,15 +34,11 @@ public class MyController {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
   }
   
-  @GetMapping("/custom")
-  public ResponseEntity<String> customResponse() {
-    String customMessage = "This is a custom response!";
-    return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(customMessage);
-  }
-  
-  // Your other endpoint mappings and methods here
+  // add charge
   @PostMapping("/add")
   public ResponseEntity<String> addToObjects(@RequestHeader("Raw-Category-Name") String rawCatName, @RequestBody String json) {
+
+    System.out.println("charge list path:" + chargeListPath);
     System.out.println("Json:" + json.toString());
     List<String[]> data = null;
     String sResponse = null;
@@ -91,8 +85,6 @@ public class MyController {
       String errorMessage = "Failed to add charge " + e.getMessage();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
     }
-    
-    
   }
   
   @PostMapping("/upload")
@@ -114,6 +106,8 @@ public class MyController {
   @PostMapping("/breakdown")
   public ResponseEntity<String> respondWithBreakdown(){
     System.out.println("received request for breakdown");
+    System.out.println("charge list path:" + chargeListPath);
+    System.out.println("constants charge list file path:" + Constants.CHARGE_LIST_PATH);
 
     CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
     CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
