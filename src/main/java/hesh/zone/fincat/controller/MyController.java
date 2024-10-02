@@ -1,7 +1,6 @@
 package hesh.zone.fincat.controller;
 
 import com.google.gson.Gson;
-import hesh.zone.fincat.config.Constants;
 import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
@@ -20,9 +19,12 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/api")
 public class MyController {
 
-  @Value("hesh.paths.charge_list")
+  @Value("${hesh.paths.charge_list}")
   private String chargeListPath;
-  
+
+  @Value("${hesh.paths.income_list}")
+  private String incomeListPath;
+
   @Autowired
   FileSystem fileSystem;
   private static CatSet chargeList = null;
@@ -43,8 +45,8 @@ public class MyController {
     List<String[]> data = null;
     String sResponse = null;
 
-    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
     
     // convert the json into a charge and add to catset list then save back to file
     try {
@@ -69,8 +71,8 @@ public class MyController {
       
       // this will have to kick off on another thread
       // serialize current sorted category objects to json
-      fileSystem.writeJson(Constants.CHARGE_LIST_PATH, chargeList);
-      fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
+      fileSystem.writeJson(chargeListPath, chargeList);
+      fileSystem.writeJson(incomeListPath, incomeList);
       
       // print totals
       chargeList.createCmdBreakdown();
@@ -107,10 +109,9 @@ public class MyController {
   public ResponseEntity<String> respondWithBreakdown(){
     System.out.println("received request for breakdown");
     System.out.println("charge list path:" + chargeListPath);
-    System.out.println("constants charge list file path:" + Constants.CHARGE_LIST_PATH);
 
-    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
 
     try{
     chargeList = chrgLstFuture.get();

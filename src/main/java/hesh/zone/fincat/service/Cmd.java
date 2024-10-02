@@ -1,9 +1,9 @@
 package hesh.zone.fincat.service;
 
-import hesh.zone.fincat.config.Constants;
 import hesh.zone.fincat.model.Breakdown;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.model.Charge;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,13 +15,19 @@ import java.util.concurrent.ExecutionException;
 public class Cmd {
   private static CatSet chargeList = null;
   private static CatSet incomeList = null;
+
+  @Value("${hesh.paths.charge_list}")
+  private String chargeListPath;
+
+  @Value("${hesh.paths.income_list}")
+  private String incomeListPath;
   
   public void terminalRun() throws FileNotFoundException, IOException {
     
     FileSystem fileSystem = new FileSystem();
 
-    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(Constants.CHARGE_LIST_PATH);
-    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(Constants.INCOME_LIST_PATH);
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
     
     // load old data into charge & income list objects and fetch new transactions into data List
       List<String[]> data = null;
@@ -90,8 +96,8 @@ public class Cmd {
       }
       
       // serialize current sorted category objects to json
-      fileSystem.writeJson(Constants.CHARGE_LIST_PATH, chargeList);
-      fileSystem.writeJson(Constants.INCOME_LIST_PATH, incomeList);
+      fileSystem.writeJson(chargeListPath, chargeList);
+      fileSystem.writeJson(incomeListPath, incomeList);
     } catch (Exception e){
 
       System.out.println("Exception Encountered:" + e);

@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 import hesh.zone.fincat.model.CatSet;
 import hesh.zone.fincat.utilities.Utils;
-import hesh.zone.fincat.config.Constants;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -22,7 +20,13 @@ import java.util.stream.Stream;
 @Service
 public class FileSystem {
   @Value("${hesh.paths.test_file_small}")
-  String smallTestFilePath;
+  private String smallTestFilePath;
+
+  @Value("${hesh.paths.pipe_file}")
+  private String pipeFilePath;
+
+  @Value("${hesh.paths.empty_file}")
+  private String emptyFilePath;
   
   /**
    * loadLocalTransactionsFile - parses the input json file sent from browser,
@@ -35,14 +39,14 @@ public class FileSystem {
     
     // all this is wasted because the Gson library parses commas back in when sending the response
     // process csv to remove commas inside quotes
-    Utils.replaceCommasOutsideQuotes(filename, Constants.PIPE_FILE_PATH);
+    Utils.replaceCommasOutsideQuotes(filename, pipeFilePath);
     
     // first we go in and fetch the csv bank data
-    CompletableFuture<List<String[]>> csvLoadFuture = loadTransactionCsvFile(Constants.PIPE_FILE_PATH);
+    CompletableFuture<List<String[]>> csvLoadFuture = loadTransactionCsvFile(pipeFilePath);
     data = csvLoadFuture.get();
     
     // cleanup
-    deleteFile(Constants.PIPE_FILE_PATH);
+    deleteFile(pipeFilePath);
     return data;
   }
   
@@ -56,10 +60,10 @@ public class FileSystem {
     List<String[]> data;
     
     // process csv to remove commas inside quotes
-    Utils.replaceLocalCommasOutsideQuotes(Constants.TEST_EMPTY_FILE_PATH, Constants.PIPE_FILE_PATH);
+    Utils.replaceLocalCommasOutsideQuotes(smallTestFilePath, pipeFilePath);
     
     // first we go in and fetch the csv bank data
-    CompletableFuture<List<String[]>> csvLoadFuture = loadTransactionCsvFile(Constants.PIPE_FILE_PATH);
+    CompletableFuture<List<String[]>> csvLoadFuture = loadTransactionCsvFile(pipeFilePath);
     data = csvLoadFuture.get();
     
     return data;

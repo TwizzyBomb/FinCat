@@ -4,11 +4,12 @@ spring:
     name: FinCat
 hesh:
   paths:
-    charge_list: "/srv/fincatconfig"
-    income_list: "/srv/fincatconfig"
+    charge_list: "/srv/fincatconfig/out/charge_list.json"
+    income_list: "/srv/fincatconfig/out/income_list.json"
     test_file_small: "/srv/fincatconfig/sample_files/CheckingTestSmall.csv"
     test_file: "/srv/fincatconfig/sample_files/CheckingTest.csv"
     pipe_file: "/srv/fincatconfig/sample_files/PipeDelimitedTransactions.csv"
+    empty_file: "/srv/fincatconfig/sample_files/testEmpty.csv"
 logging:
   level:
     org:
