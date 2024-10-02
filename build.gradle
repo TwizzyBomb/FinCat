@@ -63,8 +63,3 @@ bootJar {
 	destinationDirectory = file("$rootDir/artifacts/jar")
 	archiveFileName = "fincat_fat.jar"
 }
-
-//javafx {
-//	version = "16" // Specify the JavaFX version you want to use
-//	modules = [ 'javafx.controls', 'javafx.fxml' ] // Specify the JavaFX modules you want to include
-//}
