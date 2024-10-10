@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api")
-public class MyController {
+public class FincatController {
 
   @Value("${hesh.paths.charge_list}")
   private String chargeListPath;
