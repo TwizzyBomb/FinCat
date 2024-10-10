@@ -13,5 +13,4 @@ public class HealthController {
     public ResponseEntity<String> healthCheck(){
         return new ResponseEntity<>("Application is up and running", HttpStatus.OK);
     }
-
 }
