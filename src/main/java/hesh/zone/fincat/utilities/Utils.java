@@ -12,8 +12,8 @@ public class Utils {
    * @param inputFile
    * @param outputFile
    */
-  public static void replaceCommasOutsideQuotes(String input, String outputFile) {
-    try (BufferedReader reader = new BufferedReader(new StringReader(input));
+  public static void replaceCommasOutsideQuotes(String inputFile, String outputFile) {
+    try (BufferedReader reader = new BufferedReader(new StringReader(inputFile));
          BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
       StringBuilder stringBuilder = new StringBuilder();
       
