@@ -26,6 +26,7 @@ public class Cmd {
     
     FileSystem fileSystem = new FileSystem();
 
+    // creates category sets (CatSet) new if files don't exist
     CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
     CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
     
@@ -42,8 +43,13 @@ public class Cmd {
       try (Scanner scanner = new Scanner(System.in)) {
       // hi
       System.out.println("Hi");
-      chargeList = chrgLstFuture.get();
-      incomeList = incmLstFuture.get();
+
+      try {
+        chargeList = chrgLstFuture.get();
+        incomeList = incmLstFuture.get();
+      } catch (Exception e) {
+        // couldn't find files
+      }
       
       // no data means say goodbye!
       if (data.size() == 0) {

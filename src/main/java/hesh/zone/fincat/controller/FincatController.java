@@ -20,10 +20,14 @@ import java.util.concurrent.CompletableFuture;
 public class FincatController {
 
   @Value("${hesh.paths.charge_list}")
-  private String chargeListPath;
+  private String CHARGE_LIST_PATH;
 
   @Value("${hesh.paths.income_list}")
-  private String incomeListPath;
+  private String INCOME_LIST_PATH;
+  @Value("${hesh.paths.csv_date_cost_desc}")
+  private String CSV_DATE_COST_DESC;
+  @Value("${hesh.paths.csv_cat_cost_desc_name_loc}")
+  private String CSV_CAT_COST_DESC;
 
   @Autowired
   FileSystem fileSystem;
@@ -43,8 +47,8 @@ public class FincatController {
     List<String[]> data = null;
     String sResponse = null;
 
-    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
-    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(CHARGE_LIST_PATH);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(INCOME_LIST_PATH);
     
     // convert the json into a charge and add to catset list then save back to file
     try {
@@ -69,8 +73,8 @@ public class FincatController {
       
       // this will have to kick off on another thread
       // serialize current sorted category objects to json
-      fileSystem.writeJson(chargeListPath, chargeList);
-      fileSystem.writeJson(incomeListPath, incomeList);
+      fileSystem.writeJson(CHARGE_LIST_PATH, chargeList);
+      fileSystem.writeJson(INCOME_LIST_PATH, incomeList);
       
       // print totals
       chargeList.createCmdBreakdown();
@@ -92,8 +96,17 @@ public class FincatController {
     System.out.println("Filename:" + fileName);
     List<String[]> data = null;
     try {
-      // fetch new transactions into pipe delimited String array List
-      data = fileSystem.parseTransactionsFile(fileName);
+      // Make pipe delimited 3 column (date, cost, desc) csv file
+      fileSystem.prepareCsvFile(fileName, CSV_DATE_COST_DESC);
+
+      // call python script
+
+
+
+      // need to pass csv file to python script which will handle the api stuff
+
+      // need to
+
       Gson gson = new Gson();
       return ResponseEntity.ok(gson.toJson(data));
     } catch (Exception e) {
@@ -107,8 +120,8 @@ public class FincatController {
   public ResponseEntity<String> respondWithBreakdown(){
     System.out.println("received request for breakdown");
 
-    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(chargeListPath);
-    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(incomeListPath);
+    CompletableFuture<CatSet> chrgLstFuture = fileSystem.getCatSetFile(CHARGE_LIST_PATH);
+    CompletableFuture<CatSet> incmLstFuture = fileSystem.getCatSetFile(INCOME_LIST_PATH);
 
     try{
     chargeList = chrgLstFuture.get();

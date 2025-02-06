@@ -4,12 +4,15 @@ spring:
     name: FinCat
 hesh:
   paths:
-    charge_list: "artifacts/out/charge_list.json"
-    income_list: "artifacts/out/income_list.json"
+    charge_list: "artifacts/out/large_charge_list.json"
+    income_list: "artifacts/out/large_income_list.json"
     test_file_small: "artifacts/sample_files/CheckingTestSmall.csv"
     test_file: "artifacts/sample_files/CheckingTest.csv"
     pipe_file: "artifacts/sample_files/PipeDelimitedTransactions.csv"
     empty_file: "artifacts/sample_files/testEmpty.csv"
+    csv_date_cost_desc: "artifacts/out/date_cost_desc.csv"
+    csv_cat_cost_desc_name_loc: "artifacts/out/cat_cost_desc_name_loc.csv"
+
 logging:
   level:
     org:

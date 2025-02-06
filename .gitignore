@@ -4,6 +4,9 @@ artifacts/
 # images
 images/
 
+# GPT Prompt
+GPT_Prompt.txt
+
 #temp
 src/main/java/hesh/zone/fincat/view/
 
